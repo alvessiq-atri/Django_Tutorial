@@ -2,6 +2,11 @@ from django.urls import path
 
 from . import views
 
+
+# How does one make it so that Django knows which app view
+# to create for a url when using the {% url %} template tag?
+# Add namespaces to your URLconf -> app_name
+app_name = 'polls'
 urlpatterns = [
     # ex: /polls/
     path('', views.index, name='index'),
