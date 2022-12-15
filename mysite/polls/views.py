@@ -3,15 +3,21 @@ from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views import generic
 from .models import Choice, Question
+from django.utils import timezone
 
 
 class IndexView(generic.ListView):
     template_name = 'polls/index.html'
     context_object_name = 'latest_question_list'
 
+    # We need to amend the get_queryset() method and change it
+    # so that it also checks the date by comparing it with timezone.now().
     def get_queryset(self):
         """Return the last five published questions."""
-        return Question.objects.order_by('-pub_date')[:5]
+        # Question.objects.filter(pub_date__lte=timezone.now()) returns a
+        # queryset containing Questions whose pub_date is
+        # less than or equal to - that is, earlier than or equal to - timezone.now.
+        return Question.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')[:5]
 
 
 # By default, the DetailView generic view uses a template called:
